@@ -1,0 +1,5 @@
+
+  - job_name: {{ inventory_hostname_short }}
+    static_configs:
+      - targets: ['localhost:9100']
+#{{ ansible_default_ipv4.address }}

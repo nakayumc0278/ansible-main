@@ -1,0 +1,16 @@
+---
+- name: main / (RedHat) Install and Update dnf packages
+  dnf:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop:
+    - "epel-release"
+    - "bash-completion"
+    - "git"
+    - "chrony"
+    - "wget"
+    - "tar"
+    - "python3"
+    - "httpd"
+  when: ansible_os_family == 'RedHat'

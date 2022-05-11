@@ -1,0 +1,47 @@
+---
+- hosts: web_servers
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: WEBサーバ ping疎通確認
+      ping:
+      register: result
+
+    - name: インストール 
+      yum:
+        name: httpd
+        state: installed
+
+    - name: pip
+      yum:
+    - name: "python-passlib installed"
+      pip:
+        name: passlib
+
+    - name: "file: /opt/classmethod/.htpasswd for basic auth"
+      htpasswd:
+        path: /opt/classmethod/.htpasswd
+        name: "ccuser"
+        password: "Cnetuser"
+        owner: root
+        group: apache
+        mode: 0640
+
+    - name: create /etc/httpd/conf.d/cm.conf
+      template:
+        src: cm.conf
+        dest: /etc/httpd/conf.d/cm.conf
+        owner: root
+        group: root
+        mode: "0644"
+#      notify: restart apache
+
+    - name:  create /var/www/html/index.html
+      template:
+        src: index.html
+        dest: /var/www/html
+        owner: root
+        group: root
+        mode: "644"
+      notify: restart apache

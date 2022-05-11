@@ -1,0 +1,44 @@
+---
+# vars file for ./roles/users
+user_newusers:
+  nakayama:
+    detail: "sotsuken user"
+    pass: "{{ 'ansible' |password_hash('sha256')}}"
+    group: nakayama
+    groups: wheel
+    priv: admin
+
+  nihashi:
+    detail: "sotsuken user"
+    pass: "{{ 'ansible' |password_hash('sha256')}}"
+    group: nihashi
+    groups: wheel
+    priv: admin
+
+  park:
+    detail: "sotsuken user"
+    pass: "{{ 'ansible' |password_hash('sha256')}}"
+    group: park
+    groups: wheel
+    priv: admin
+
+  ccuser:
+    detail: "ccuser user"
+    pass: "{{ 'Cnetuser' |password_hash('sha256') }}"
+    group: ccuser
+    append: yes
+    priv: member
+
+  king:
+    detail: "king user"
+    pass: "{{ 'king' |password_hash('sha256') }}"
+    group: king
+    append: yes
+    priv: member
+
+  queen:
+    detail: "queen user"
+    pass: "{{ 'queen' |password_hash('sha256') }}"
+    group: queen
+    append: yes
+    priv: member

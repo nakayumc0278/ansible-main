@@ -1,0 +1,30 @@
+- name: main / (RedHat) Deploy node_exporter Repo file
+  template:
+    src: repo.j2
+    dest: /etc/yum.repos.d/prometheus.repo
+    owner: root
+    group: root
+    mode: 0755
+# - name: (2-1) paskage install  prometheus2
+#   dnf:
+#     name: prometheus2
+#     state: installed
+
+- name: main / (RedHat) Install node_exporter
+  dnf:
+    name: node_exporter
+    state: installed
+
+- name: main / (RedHat) node_exporter service restart
+  service:
+    name: node_exporter
+    state: started
+    enabled: true
+  changed_when: false
+
+- name: main / (RedHat) firewallld open port 9100 for node_exporter
+  firewalld:
+    port: 9100/tcp
+    permanent: true
+    immediate: yes
+    state: enabled

@@ -1,0 +1,49 @@
+---
+- name: main / (Debian) install python-passlib for pip
+  pip:
+    name: passlib
+
+- name: main / (Debian) Deploy /var/www/html/.htpasswd
+  htpasswd:
+    path: /var/www/html/.htpasswd
+    name: "user"
+    password: "password"
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: main / (Debian) Deploy /etc/apache2/conf.d/basic.conf
+  copy:
+    src: basic.conf
+    dest: /etc/apache2/sites-available/auth-basic.conf
+    owner: www-data
+    group: www-data
+    mode: "0644"
+
+- name: main / (Debian) Create symbolic link - auth-basic.conf
+  file:
+    src: "/etc/apache2/sites-available/auth-basic.conf"
+    dest: "/etc/apache2/sites-enabled/auth-basic.conf"
+    state: link
+
+- name: main / (Debian) Deploy /var/www/html/index.html
+  template:
+    src: index.j2
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: "0644"
+
+- name: main / (Debian) apache2 service restart
+  systemd:
+    service: apache2
+    state: restarted
+    enabled: true
+  changed_when: False
+
+- name: main / (Debian) ufw port open for apache service
+  ufw:
+    rule: allow
+    name: apache
+    state: reloaded
+  changed_when: False

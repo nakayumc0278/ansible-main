@@ -1,0 +1,16 @@
+.vscode-server/*
+.config/*
+.local/*
+.cache/*
+.vscode/*
+.ssh/*
+.vim/*
+.gitconfig
+.viminfo
+.wget-hsts
+.esd_auth
+.bash_logout
+.bash_history
+.redhat/*
+.ansible/tmp/*
+.ansible/cp/*

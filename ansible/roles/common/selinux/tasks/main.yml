@@ -1,0 +1,21 @@
+---
+- name: main / (RedHat) Install Python modules for SELinux
+  dnf:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - "libselinux-python3 "
+  when: ansible_os_family == 'RedHat'
+
+- name: main / (RedHat) Disable SELinux
+  selinux:
+    state: disabled
+    #state: enforing
+    #state: permissvive
+  register: selinux
+
+- name: common/selinux {{ COLON }} main / (RedHat) nodes rebooting...
+  reboot:
+    reboot_timeout: 300
+  changed_when: False

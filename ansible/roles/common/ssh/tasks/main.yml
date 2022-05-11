@@ -1,0 +1,13 @@
+---
+- name: "Listen SSH 22 -> 50022 Change."
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^Port"
+    insertafter: "^#Port"
+    line: "Port {{ sshd_port }}"
+
+- name: "sshd restart"
+  systemd:
+    service: sshd
+    state: restarted
+    enabled: yes

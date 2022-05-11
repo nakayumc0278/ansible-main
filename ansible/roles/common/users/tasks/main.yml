@@ -1,0 +1,37 @@
+---
+# tasks file for ./roles/users
+
+- name: main / Debian valiables
+  include_vars: "debian.yml"
+  when: ansible_os_family == 'Debian'
+
+- name: main / RedHat valiables
+  include_vars: "redhat.yml"
+  when: ansible_os_family == 'RedHat'
+
+- name: main / Create new group
+  group:
+    name: "{{ item.value.group }}"
+  loop: "{{ user_newusers|dict2items }}"
+
+- name: main / Create new users
+  user:
+    name: "{{ item.key }}"
+    password: "{{ item.value.pass }}"
+    update_password: on_create
+    shell: /bin/bash
+    home: "/home/{{ item.key }}"
+    state: present
+    group: "{{ item.value.group }}"
+    groups: "{{ item.value.groups }}"
+  loop: "{{ user_newusers|dict2items }}"
+  when: item.value.groups  is defined
+# - name: main / Deploy temporary sudoers files
+#   template:
+#     src: "{{ item.value.priv }}_sudoers.j2"
+#     dest: "/etc/sudoers.d/{{ item.key }}"
+#     owner: root
+#     group: root
+#     mode: 0400
+#     validate: "visudo -c -f %s"
+#   loop: "{{ user_newusers|dict2items }}"

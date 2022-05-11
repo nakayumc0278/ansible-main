@@ -1,0 +1,39 @@
+---
+- hosts: web_servers
+  gather_facts: true
+  become: true
+
+  tasks:
+  - name: (1) Modify repo file
+    template:
+      src: repo.j2
+      dest: /etc/yum.repos.d/prometheus.repo
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: (2-1) Install prometheus2
+    dnf:
+      name: prometheus2
+      state: installed
+
+  - name: (2-2) Install node_exporter
+    dnf:
+      name: node_exporter
+      state: installed
+
+  - name: (3) Create cfg_ansible file
+    template:
+      src: cfg_ansible.j2
+      dest: /etc/prometheus/cfg_ansible.yml
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: (4) Modify prometheus.yml
+    shell: cat /etc/prometheus/cfg_ansible.yml >> /etc/prometheus/prometheus.yml
+
+  - name: (5) Reboot node_exporter
+    service:
+      name: node_exporter
+      state: restarted

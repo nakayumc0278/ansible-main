@@ -1,0 +1,13 @@
+---
+- name: main / (RedHat) firewalld enable
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: main / (Debian) ufw enable
+  ufw:
+    state: enabled
+    policy: allow
+  when: ansible_os_family == 'Debian'

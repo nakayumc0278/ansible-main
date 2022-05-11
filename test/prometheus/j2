@@ -1,0 +1,5 @@
+{% for item in play_hosts %}
+  - job_name: {{ inventory_hostname }}
+    static_configs:
+      - targets: ["{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}:9100"]
+      {% endfor %}

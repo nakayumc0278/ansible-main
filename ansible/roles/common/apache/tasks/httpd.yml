@@ -1,0 +1,43 @@
+---
+- name: main / (RedHat) install python-passlib for pip
+  pip:
+    name: passlib
+
+- name: main / Deploy /var/www/html/.htpasswd
+  htpasswd:
+    path: /var/www/html/.htpasswd
+    name: "user"
+    password: "password"
+    owner: apache
+    group: apache
+    mode: 0640
+
+- name: main / (RedHat) Deploy /etc/httpd/conf.d/basic.conf
+  copy:
+    src: basic.conf
+    dest: /etc/httpd/conf.d/basic.conf
+    owner: apache
+    group: apache
+    mode: "0644"
+
+- name: main / (RedHat) Deploy /var/www/html/index.html
+  template:
+    src: index.j2
+    dest: /var/www/html/index.html
+    owner: apache
+    group: apache
+    mode: "0644"
+
+- name: main / (RedHat) httpd servise restart
+  systemd:
+    service: httpd
+    state: started
+    enabled: true
+  changed_when: False
+
+- name: main / (RedHat) firewalld port pen for httpd service
+  firewalld:
+    service: http
+    permanent: true
+    immediate: yes
+    state: enabled

@@ -1,0 +1,14 @@
+---
+- name: Reboot nodes.
+  hosts: node
+  become: true
+
+  post_tasks:
+    - name: nodes rebooting...
+      reboot:
+      changed_when: False
+
+    - name: Waiting connection
+      wait_for_connection:
+        delay: 5
+        timeout: 60

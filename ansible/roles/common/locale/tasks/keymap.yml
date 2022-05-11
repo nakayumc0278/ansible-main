@@ -1,0 +1,11 @@
+---
+# tasks file for ./roles/locale
+- name: main / check keymap
+  shell: 'localectl status | grep "VC Keymap: " | cut -c 19-'
+  register: localectl_keymap_result
+  ignore_errors: yes
+  changed_when: False
+
+- name: main / Setting keymap
+  shell: localectl set-keymap {{ locale_keymap }}
+  when: "'jp' not in localectl_keymap_result.stdout"

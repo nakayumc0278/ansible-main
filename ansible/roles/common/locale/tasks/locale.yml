@@ -1,0 +1,11 @@
+---
+# tasks file for ./roles/locale
+- name: main / system locale check
+  shell: localectl status
+  register: localectl_result
+  check_mode: no
+  changed_when: false
+
+- name: main / Setting locale
+  shell: localectl set-locale LANG={{ locale_locale }}
+  when: "'LANG=ja_JP.utf8' not in localectl_result.stdout"

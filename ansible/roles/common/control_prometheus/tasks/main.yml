@@ -1,0 +1,16 @@
+---
+- name: (2-2) Install node_exporter
+  dnf:
+    name: node_exporter
+    state: present
+
+- name: (3) Deploy cfg_ansible file
+  template:
+    src: cfg_ansible.j2
+    dest: /etc/prometheus/cfg_ansible.yml
+    owner: root
+    group: root
+    mode: 0755
+
+- name: (4) Modify prometheus.yml
+  shell: cat /etc/prometheus/cfg_ansible.yml >> /etc/prometheus/prometheus.yml

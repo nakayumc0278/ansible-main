@@ -1,0 +1,12 @@
+---
+# tasks file for ./roles/locale
+- name: main / system timezone check
+  shell: timedatectl status
+  register: timedatectl_result
+  check_mode: no
+  changed_when: false
+
+- name: main / Setting timezone
+  timezone:
+    name: "{{ locale_timezone }}"
+  when: "'Asia/Tokyo' not in timedatectl_result.stdout"

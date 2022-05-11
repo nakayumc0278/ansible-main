@@ -1,0 +1,17 @@
+- name: main / (Debian) Install node_exporter
+  apt:
+    name: prometheus-node-exporter
+    state: present
+
+- name: main / (Debian) node_exporter service restart
+  service:
+    name: prometheus-node-exporter-apt.service
+    state: started
+    enabled: true
+  changed_when: false
+
+- name: main / (Debian) ufw open port 9100 for node_exporter
+  ufw:
+    rule: allow
+    port: "9100"
+    proto: tcp
